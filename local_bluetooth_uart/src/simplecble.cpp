@@ -8,12 +8,14 @@
 #ifdef __ANDROID__
 #include <jni.h>
 static JavaVM* g_jvm = nullptr;
-extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+
+extern "C" JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     g_jvm = vm;
     return JNI_VERSION_1_6;
 }
+
 // Stub for modern NDKs that don't provide libnativehelper
-extern "C" jint JNI_GetCreatedJavaVMs(JavaVM** vmBuf, jsize bufLen, jsize* nVMs) {
+extern "C" JNIEXPORT jint JNICALL JNI_GetCreatedJavaVMs(JavaVM** vmBuf, jsize bufLen, jsize* nVMs) {
     if (bufLen > 0 && g_jvm != nullptr) {
         vmBuf[0] = g_jvm;
         if (nVMs) *nVMs = 1;

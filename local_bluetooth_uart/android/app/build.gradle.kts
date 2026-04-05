@@ -18,6 +18,12 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+    
+    sourceSets {
+        getByName("main") {
+            java.srcDir("../../src/simpleble/simpledroidbridge/src/main/java")
+        }
+    }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
