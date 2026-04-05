@@ -5,6 +5,25 @@
 #include <vector>
 #include <mutex>
 
+#ifdef __ANDROID__
+#include <jni.h>
+static JavaVM* g_jvm = nullptr;
+extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    g_jvm = vm;
+    return JNI_VERSION_1_6;
+}
+// Stub for modern NDKs that don't provide libnativehelper
+extern "C" jint JNI_GetCreatedJavaVMs(JavaVM** vmBuf, jsize bufLen, jsize* nVMs) {
+    if (bufLen > 0 && g_jvm != nullptr) {
+        vmBuf[0] = g_jvm;
+        if (nVMs) *nVMs = 1;
+        return JNI_OK;
+    }
+    if (nVMs) *nVMs = 0;
+    return JNI_ERR;
+}
+#endif
+
 // Mocking some parts since SimpleBLE doesn't have a direct C wrapper in its default distro.
 // This implements the requested symbols using SimpleBLE's C++ API.
 
