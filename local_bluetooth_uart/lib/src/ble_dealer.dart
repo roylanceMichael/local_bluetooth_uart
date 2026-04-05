@@ -21,12 +21,12 @@ class BleDealer {
     // NativeCallable is available in recent Dart versions for async callbacks
     final onFound = NativeCallable<
         Void Function(simplecble_central_t, Pointer<Utf8>,
-            Pointer<Utf8>)>.isolateLocal(_onPeripheralFound, sticky: true);
+            Pointer<Utf8>)>.isolateLocal(_onPeripheralFound);
     _bindings.simplecble_central_set_on_peripheral_found(_central, onFound.nativeFunction);
 
     final onEvent = NativeCallable<
         Void Function(Pointer<Utf8>,
-            Bool)>.isolateLocal(_onConnectionEvent, sticky: true);
+            Bool)>.isolateLocal(_onConnectionEvent);
     _bindings.simplecble_set_on_connection_event(onEvent.nativeFunction);
   }
 

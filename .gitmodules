@@ -1,0 +1,3 @@
+[submodule "local_bluetooth_uart/src/simpleble"]
+	path = local_bluetooth_uart/src/simpleble
+	url = https://github.com/OpenBluetoothToolbox/SimpleBLE.git

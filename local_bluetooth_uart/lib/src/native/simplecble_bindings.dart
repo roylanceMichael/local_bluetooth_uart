@@ -21,7 +21,15 @@ class SimpleCbleBindings {
   late final ffi.DynamicLibrary _dylib;
 
   SimpleCbleBindings() {
-    _dylib = ffi.DynamicLibrary.open('libsimplecble.dylib'); // Adjust for platform
+    if (ffi.Abi.current() == ffi.Abi.macosArm64 || ffi.Abi.current() == ffi.Abi.macosX64) {
+      _dylib = ffi.DynamicLibrary.open('libsimplecble.dylib');
+    } else if (ffi.Abi.current() == ffi.Abi.windowsX64 || ffi.Abi.current() == ffi.Abi.windowsArm64) {
+      _dylib = ffi.DynamicLibrary.open('simplecble.dll');
+    } else if (ffi.Abi.current() == ffi.Abi.androidArm64 || ffi.Abi.current() == ffi.Abi.androidX64 || ffi.Abi.current() == ffi.Abi.androidArm) {
+      _dylib = ffi.DynamicLibrary.open('libsimplecble.so');
+    } else {
+      _dylib = ffi.DynamicLibrary.process(); // iOS or static linking fallback
+    }
   }
 
   late final simplecble_central_create = _dylib
