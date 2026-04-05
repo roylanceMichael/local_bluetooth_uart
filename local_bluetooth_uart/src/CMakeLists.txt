@@ -16,6 +16,10 @@ add_library(simplecble SHARED
 
 target_link_libraries(simplecble PRIVATE simpleble::simpleble)
 
+if (ANDROID)
+    target_include_directories(simplecble PRIVATE simpleble/dependencies/internal/include)
+endif()
+
 if (WIN32)
     set_target_properties(simplecble PROPERTIES
         COMPILE_PDB_NAME simplecble

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'src/ble_dealer.dart';
 import 'src/ble_player.dart';
 import 'src/native/simplecble_bindings.dart';
@@ -58,8 +59,27 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     }
   }
 
-  void _startDealer() {
+  Future<bool> _requestPermissions() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+      Permission.bluetoothAdvertise,
+      Permission.location,
+    ].request();
+
+    if (statuses.values.any((status) => !status.isGranted)) {
+      setState(() {
+        _status = "Bluetooth/Location permissions are required to scan/advertise.";
+      });
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _startDealer() async {
     if (_bindings == null) return;
+    if (!await _requestPermissions()) return;
+    
     setState(() => _status = "Starting Dealer (Central)...");
     
     _player?.stop();
@@ -71,8 +91,10 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     setState(() => _status = "Dealer Active. Pulsing 200 bytes every 100ms.");
   }
 
-  void _startPlayer() {
+  Future<void> _startPlayer() async {
     if (_bindings == null) return;
+    if (!await _requestPermissions()) return;
+    
     setState(() => _status = "Starting Player (Peripheral)...");
 
     _dealer?.stop();

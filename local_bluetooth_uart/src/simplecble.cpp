@@ -7,10 +7,15 @@
 
 #ifdef __ANDROID__
 #include <jni.h>
+#include <simplejni/Registry.hpp>
 static JavaVM* g_jvm = nullptr;
 
 extern "C" JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     g_jvm = vm;
+    JNIEnv* env = nullptr;
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) == JNI_OK) {
+        SimpleJNI::Registrar::get().preload(env);
+    }
     return JNI_VERSION_1_6;
 }
 
