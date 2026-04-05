@@ -1,0 +1,16 @@
+# ffigen.yaml
+name: SimpleCbleBindings
+description: Dart FFI bindings for SimpleCBLE (C-wrapper for SimpleBLE).
+output: 'lib/src/native/simplecble_bindings.dart'
+headers:
+  entry-points:
+    - 'src/simplecble.h'
+  include-directives:
+    - 'src/simplecble.h'
+preamble: |
+  // ignore_for_file: always_specify_types
+  // ignore_for_file: camel_case_types
+  // ignore_for_file: non_constant_identifier_names
+comments:
+  style: any
+  length: full
